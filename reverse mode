@@ -1,0 +1,31 @@
+import cv2
+
+# Open the video file
+cap = cv2.VideoCapture(r"C:\Users\itsme\Downloads\pexels_videos_2670 (1080p).mp4")
+
+# Get the frames per second (fps) and frame count
+fps = int(cap.get(cv2.CAP_PROP_FPS))
+frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+
+# Create a VideoWriter object to save the reversed video
+fourcc = cv2.VideoWriter_fourcc(*'XVID')
+out = cv2.VideoWriter('reversed_video.avi', fourcc, fps, (int(cap.get(3)), int(cap.get(4))))
+
+# Loop through frames in reverse order
+for i in range(frame_count - 1, -1, -1):
+    cap.set(cv2.CAP_PROP_POS_FRAMES, i)
+    ret, frame = cap.read()
+    if not ret:
+        break
+    
+    # Write the reversed frame to the VideoWriter
+    out.write(frame)
+    
+    cv2.imshow('Reversed Video', frame)
+    
+    if cv2.waitKey(30) & 0xFF == 27:  # Press 'Esc' to exit
+        break
+
+cap.release()
+out.release()
+cv2.destroyAllWindows()
